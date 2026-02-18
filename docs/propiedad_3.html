@@ -1,20 +1,4 @@
-const fs = require('fs');
-const csv = require('csv-parser');
 
-const propiedades = [];
-
-// USAMOS EL MISMO CSV QUE LOS OTROS SCRIPTS
-fs.createReadStream('propiedades.csv')
-  .pipe(csv())
-  .on('data', (row) => {
-    propiedades.push(row);
-  })
-  .on('end', () => {
-    propiedades.forEach((propiedad, index) => {
-      // Usamos propiedad.Titulo (con mayúscula si así está en tu CSV)
-      const tituloProp = propiedad.Titulo || propiedad.titulo || "Propiedad en Venta";
-      
-      const htmlContent = `
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -32,17 +16,12 @@ fs.createReadStream('propiedades.csv')
 </head>
 <body>
     <div class="card">
-        <img src="fotos/propiedad_${index}.jpg" alt="Foto">
-        <h2>${tituloProp}</h2>
+        <img src="fotos/propiedad_3.jpg" alt="Foto">
+        <h2>ERROR: The request could not be satisfied</h2>
         <a href="https://wa.me/5492215551234" class="btn">✅ QUIERO VISITARLA</a>
         <div class="footer">
             ⚠️ La información es ilustrativa. Las medidas definitivas surgirán del título.
         </div>
     </div>
 </body>
-</html>`;
-      
-      fs.writeFileSync(`docs/propiedad_${index}.html`, htmlContent);
-    });
-    console.log('✅ Fichas generadas exitosamente en docs/ usando propiedades.csv');
-  });
+</html>
