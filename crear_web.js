@@ -1,63 +1,44 @@
 const fs = require('fs');
+const csv = require('csv-parser');
 
-function generarFichasWeb() {
-    console.log("🌐 GENERANDO FICHAS WEB PROFESIONALES...");
+const propiedades = [];
 
-    if (!fs.existsSync('propiedades.csv')) return;
-    if (!fs.existsSync('web')) fs.mkdirSync('web'); // Carpeta donde irán las páginas
-
-    const contenido = fs.readFileSync('propiedades.csv', 'utf-8');
-    const lineas = contenido.split('\n').slice(1);
-
-    lineas.forEach((linea, i) => {
-        if (!linea.trim() || linea.includes("ERROR")) return;
-        const columnas = linea.match(/(".*?"|[^",\s]+)(?=\s*,|\s*$)/g);
-        if (!columnas) return;
-
-        const titulo = columnas[1].replace(/"/g, '');
-        const precio = columnas[2].replace(/"/g, '');
-        const urlOriginal = columnas[0].replace(/"/g, '');
-        const rutaFotoLocal = `../fotos/propiedad_${i}.jpg`; // Buscamos la foto que ya bajamos
-
-        // Link de WhatsApp para el botón
-        const miTelefono = "5492214959216"; // Usé el de tu captura
-        const msjWa = encodeURIComponent(`¡Hola! Me interesa visitar: ${titulo}`);
-        const linkWa = `https://wa.me/${miTelefono}?text=${msjWa}`;
-
-        // DISEÑO DE LA PÁGINA (HTML + CSS)
-        const html = `
-        <!DOCTYPE html>
-        <html lang="es">
-        <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>${titulo}</title>
-            <style>
-                body { font-family: sans-serif; margin: 0; background: #f4f4f4; text-align: center; }
-                .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-                img { width: 100%; border-radius: 10px; }
-                h1 { font-size: 20px; color: #333; }
-                .price { font-size: 24px; color: #2ecc71; font-weight: bold; }
-                .btn { display: block; background: #25d366; color: white; padding: 15px; text-decoration: none; border-radius: 10px; margin-top: 20px; font-weight: bold; font-size: 18px; }
-                .legal { font-size: 10px; color: #999; margin-top: 30px; text-align: justify; }
-            </style>
-        </head>
-        <body>
-            <div class="container">
-                <img src="${rutaFotoLocal}" alt="Propiedad">
-                <h1>${titulo}</h1>
-                <p class="price">${precio}</p>
-                <a href="${linkWa}" class="btn">✅ QUIERO VISITARLA</a>
-                <a href="${urlOriginal}" style="display:block; margin-top:15px; color:#3498db;">Ver ficha original</a>
-                <div class="legal">⚠️ CLÁUSULA LEGAL: La información es ilustrativa. Las medidas definitivas surgirán del título de propiedad.</div>
-            </div>
-        </body>
-        </html>`;
-
-        fs.writeFileSync(`web/propiedad_${i}.html`, html);
+fs.createReadStream('propiedades_full.csv')
+  .pipe(csv())
+  .on('data', (row) => {
+    propiedades.push(row);
+  })
+  .on('end', () => {
+    propiedades.forEach((propiedad, index) => {
+      const htmlContent = `
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ficha de Propiedad</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; padding: 20px; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); max-width: 400px; text-align: center; }
+        img { max-width: 100%; border-radius: 10px; }
+        h2 { color: #333; font-size: 18px; }
+        .btn { display: inline-block; background-color: #00e676; color: white; padding: 15px 25px; text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 20px; font-size: 18px; }
+        .footer { font-size: 10px; color: #777; margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <img src="fotos/propiedad_${index}.jpg" alt="Propiedad">
+        <h2>${propiedad.titulo}</h2>
+        <a href="https://wa.me/TU_TELEFONO_ACA" class="btn">✅ QUIERO VISITARLA</a>
+        <div class="footer">
+            ⚠️ CLÁUSULA LEGAL: La información es ilustrativa. Las medidas definitivas surgirán del título de propiedad.
+        </div>
+    </div>
+</body>
+</html>`;
+      
+      fs.writeFileSync(`docs/propiedad_${index}.html`, htmlContent);
     });
-
-    console.log("✅ ¡Páginas web creadas en la carpeta 'web'!");
-}
-
-generarFichasWeb();
+    console.log('✅ Fichas generadas en carpeta docs sin links externos.');
+  });
