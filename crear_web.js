@@ -10,10 +10,12 @@ fs.createReadStream('propiedades.csv')
   })
   .on('end', () => {
     propiedades.forEach((propiedad, index) => {
-      // Ajustamos los nombres de las columnas exactos de tu CSV
+      // 1. Extraemos el nombre real de la foto desde el CSV
+      // Si en el CSV dice "fotos/propiedad_24.jpg", nosotros solo queremos "propiedad_24.jpg"
+      const nombreFotoReal = propiedad.Ruta_Foto ? propiedad.Ruta_Foto.replace('fotos/', '') : `propiedad_${index}.jpg`;
+      
       const titulo = propiedad.Titulo || "Propiedad en Venta";
       const precio = propiedad.Precio || "Consultar";
-      const desc = propiedad.Descripcion || "Consultanos para más detalles sobre esta excelente propiedad.";
       
       const htmlContent = `
 <!DOCTYPE html>
@@ -30,40 +32,26 @@ fs.createReadStream('propiedades.csv')
         .foto-principal img { width: 100%; height: 100%; object-fit: cover; }
         .badge-precio { position: absolute; bottom: 20px; left: 20px; background: #25D366; color: white; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-size: 20px; }
         .content { padding: 30px; }
-        h1 { font-size: 24px; color: #1a1a1a; margin: 0 0 15px 0; line-height: 1.2; }
-        .caracteristicas { display: flex; justify-content: space-between; margin-bottom: 25px; padding: 15px 0; border-top: 1px solid #eee; border-bottom: 1px solid #eee; }
-        .caracteristica-item { text-align: center; color: #666; font-size: 14px; }
-        .caracteristica-item i { display: block; font-size: 20px; color: #333; margin-bottom: 5px; }
-        .descripcion-titulo { font-weight: bold; color: #333; margin-bottom: 10px; display: block; }
-        .descripcion-texto { color: #555; font-size: 16px; line-height: 1.6; margin-bottom: 30px; }
-        .btn-whatsapp { display: flex; align-items: center; justify-content: center; background: #25D366; color: white; text-decoration: none; padding: 20px; border-radius: 15px; font-weight: bold; font-size: 18px; gap: 10px; box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3); }
-        .footer-legal { font-size: 10px; color: #aaa; text-align: center; margin-top: 30px; padding: 0 20px 20px; }
+        h1 { font-size: 22px; color: #1a1a1a; margin: 0 0 15px 0; line-height: 1.2; }
+        .descripcion-texto { color: #555; font-size: 16px; line-height: 1.6; margin-bottom: 30px; background: #f9f9f9; padding: 15px; border-radius: 10px; }
+        .btn-whatsapp { display: flex; align-items: center; justify-content: center; background: #25D366; color: white; text-decoration: none; padding: 20px; border-radius: 15px; font-weight: bold; font-size: 18px; gap: 10px; }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="foto-principal">
-            <img src="fotos/propiedad_${index}.jpg" onerror="this.src='https://via.placeholder.com/500x350?text=Foto+no+disponible'" alt="Foto propiedad">
+            <img src="fotos/${nombreFotoReal}" onerror="this.src='https://via.placeholder.com/500x350?text=Foto+en+proceso'" alt="Foto">
             <div class="badge-precio">${precio}</div>
         </div>
         <div class="content">
             <h1>${titulo}</h1>
-            
-            <div class="caracteristicas">
-                <div class="caracteristica-item"><i class="fa-solid fa-door-open"></i>Ambientes</div>
-                <div class="caracteristica-item"><i class="fa-solid fa-bed"></i>Dormitorios</div>
-                <div class="caracteristica-item"><i class="fa-solid fa-bath"></i>Baños</div>
+            <div class="descripcion-texto">
+                📍 Ubicación: La Plata y alrededores.<br><br>
+                Excelente oportunidad de inversión. Consultanos por más detalles técnicos, ambientes y visitas programadas.
             </div>
-
-            <span class="descripcion-titulo">Descripción de la propiedad</span>
-            <div class="descripcion-texto">${desc}</div>
-
             <a href="https://wa.me/5492215551234" class="btn-whatsapp">
                 <i class="fa-brands fa-whatsapp"></i> QUIERO VISITARLA
             </a>
-        </div>
-        <div class="footer-legal">
-            ⚠️ La información es ilustrativa. Las medidas definitivas surgirán del título de propiedad.
         </div>
     </div>
 </body>
@@ -71,5 +59,5 @@ fs.createReadStream('propiedades.csv')
       
       fs.writeFileSync(`docs/propiedad_${index}.html`, htmlContent);
     });
-    console.log('✅ Fichas estilo "Propio" generadas correctamente.');
+    console.log('✅ Fichas sincronizadas con los nombres de fotos del CSV.');
   });
