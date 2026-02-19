@@ -45,7 +45,13 @@ Tocá acá: ${linkMeGusta}
 --------------------------------------------------
 🔗 Ver fotos originales: ${urlOriginal}
 
-⚠️ CLÁUSULA LEGAL: "La información gráfica y escrita contenida es ilustrativa. Las medidas definitivas surgirán del título de propiedad. No nos responsabilizamos por errores de terceros."
+⚠️ CLÁUSULA LEGAL: "La siguiente información se proporciona con fines orientativos para personas en búsqueda de inmuebles. Las descripciones, imágenes y datos aquí presentados provienen de terceros y podrían corresponder a una propiedad comercializada por otra inmobiliaria.
+
+Se recomienda confirmar todos los detalles con la inmobiliaria responsable de la operación.
+
+La disponibilidad de la unidad está sujeta a cambios sin previo aviso, al igual que su precio. Las superficies, medidas, expensas y servicios mencionados son aproximados y pueden sufrir modificaciones.
+
+Las fotografías y videos tienen carácter ilustrativo y no contractual. Queda prohibido la publicacion de esta ficha."
 --------------------------------------------------
 \n`;
 
