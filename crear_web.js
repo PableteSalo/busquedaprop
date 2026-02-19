@@ -10,13 +10,13 @@ fs.createReadStream('propiedades.csv')
   })
   .on('end', () => {
     propiedades.forEach((propiedad, index) => {
-      // 1. Extraemos el nombre real de la foto desde el CSV
-      // Si en el CSV dice "fotos/propiedad_24.jpg", nosotros solo queremos "propiedad_24.jpg"
       const nombreFotoReal = propiedad.Ruta_Foto ? propiedad.Ruta_Foto.replace('fotos/', '') : `propiedad_${index}.jpg`;
-      
       const titulo = propiedad.Titulo || "Propiedad en Venta";
       const precio = propiedad.Precio || "Consultar";
       
+      // 📝 ACÁ CAMBIÁS TU FRASE LEGAL
+      const fraseLegal = "La información gráfica y escrita contenida es ilustrativa. Las medidas definitivas surgirán del título de propiedad y de la liquidación de expensas definitiva.";
+
       const htmlContent = `
 <!DOCTYPE html>
 <html lang="es">
@@ -32,9 +32,18 @@ fs.createReadStream('propiedades.csv')
         .foto-principal img { width: 100%; height: 100%; object-fit: cover; }
         .badge-precio { position: absolute; bottom: 20px; left: 20px; background: #25D366; color: white; padding: 10px 20px; border-radius: 10px; font-weight: bold; font-size: 20px; }
         .content { padding: 30px; }
-        h1 { font-size: 22px; color: #1a1a1a; margin: 0 0 15px 0; line-height: 1.2; }
-        .descripcion-texto { color: #555; font-size: 16px; line-height: 1.6; margin-bottom: 30px; background: #f9f9f9; padding: 15px; border-radius: 10px; }
-        .btn-whatsapp { display: flex; align-items: center; justify-content: center; background: #25D366; color: white; text-decoration: none; padding: 20px; border-radius: 15px; font-weight: bold; font-size: 18px; gap: 10px; }
+        h1 { font-size: 22px; color: #1a1a1a; margin-bottom: 20px; }
+        
+        /* Estilo Mapa */
+        .mapa-container { width: 100%; height: 200px; background: #eee; border-radius: 15px; margin-bottom: 25px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        
+        .botones-container { display: flex; flex-direction: column; gap: 15px; }
+        .btn { display: flex; align-items: center; justify-content: center; text-decoration: none; padding: 18px; border-radius: 15px; font-weight: bold; font-size: 16px; gap: 10px; transition: 0.2s; }
+        
+        .btn-whatsapp { background: #25D366; color: white; box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3); }
+        .btn-descarte { background: #ff4757; color: white; box-shadow: 0 4px 12px rgba(255, 71, 87, 0.3); }
+        
+        .footer-legal { font-size: 11px; color: #aaa; text-align: center; margin-top: 30px; padding: 20px; border-top: 1px solid #eee; }
     </style>
 </head>
 <body>
@@ -45,13 +54,24 @@ fs.createReadStream('propiedades.csv')
         </div>
         <div class="content">
             <h1>${titulo}</h1>
-            <div class="descripcion-texto">
-                📍 Ubicación: La Plata y alrededores.<br><br>
-                Excelente oportunidad de inversión. Consultanos por más detalles técnicos, ambientes y visitas programadas.
+
+            <div class="mapa-container">
+                <i class="fa-solid fa-map-location-dot" style="font-size: 40px; color: #ccc;"></i>
+                <span style="margin-left: 10px; color: #999;">Mapa de ubicación</span>
             </div>
-            <a href="https://wa.me/5492215551234" class="btn-whatsapp">
-                <i class="fa-brands fa-whatsapp"></i> QUIERO VISITARLA
-            </a>
+
+            <div class="botones-container">
+                <a href="https://wa.me/5492215551234?text=Me%20interesa%20visitar:%20${encodeURIComponent(titulo)}" class="btn btn-whatsapp">
+                    <i class="fa-brands fa-whatsapp"></i> ✅ QUIERO VISITARLA
+                </a>
+                
+                <a href="https://wa.me/5492215551234?text=NO%20ME%20GUSTA%20esta%20opción:%20${encodeURIComponent(titulo)}" class="btn btn-descarte">
+                    <i class="fa-solid fa-xmark"></i> ❌ NO ME GUSTA
+                </a>
+            </div>
+        </div>
+        <div class="footer-legal">
+            ⚠️ ${fraseLegal}
         </div>
     </div>
 </body>
@@ -59,5 +79,5 @@ fs.createReadStream('propiedades.csv')
       
       fs.writeFileSync(`docs/propiedad_${index}.html`, htmlContent);
     });
-    console.log('✅ Fichas sincronizadas con los nombres de fotos del CSV.');
+    console.log('✅ Fichas con mapa, descarte y nueva frase legal generadas.');
   });
