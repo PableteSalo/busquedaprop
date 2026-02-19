@@ -4,23 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ficha Inmobiliaria</title>
+    <title>Casa en venta 10 ambientes en 53 E/ 10 y 11 700, La Plata, La Plata, Buenos Aires</title>
     <style>
-        body { font-family: sans-serif; background-color: #f0f2f5; display: flex; justify-content: center; padding: 20px; }
-        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); max-width: 450px; text-align: center; }
-        img { max-width: 100%; border-radius: 10px; margin-bottom: 15px; height: auto; }
-        h2 { color: #1c1e21; font-size: 20px; margin: 10px 0; }
-        .btn { display: inline-block; background-color: #25D366; color: white; padding: 15px 25px; text-decoration: none; border-radius: 10px; font-weight: bold; font-size: 18px; margin-top: 10px; }
-        .footer { font-size: 11px; color: #888; margin-top: 25px; border-top: 1px solid #eee; padding-top: 10px; }
+        body { font-family: 'Segoe UI', sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; padding: 20px; line-height: 1.6; }
+        .card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 500px; text-align: center; }
+        .foto-container { width: 100%; height: 300px; background-color: #eee; border-radius: 15px; overflow: hidden; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; }
+        img { width: 100%; height: 100%; object-fit: cover; }
+        h2 { color: #2c3e50; font-size: 24px; margin: 10px 0; }
+        .precio { font-size: 22px; color: #27ae60; font-weight: bold; margin-bottom: 15px; }
+        .descripcion { text-align: left; color: #555; font-size: 16px; margin: 20px 0; padding: 15px; background: #f9f9f9; border-radius: 10px; }
+        .btn { display: inline-block; background-color: #25D366; color: white; padding: 18px 35px; text-decoration: none; border-radius: 12px; font-weight: bold; font-size: 18px; transition: transform 0.2s; }
+        .btn:hover { transform: scale(1.05); }
+        .footer { font-size: 11px; color: #999; margin-top: 30px; border-top: 1px solid #eee; padding-top: 15px; }
     </style>
 </head>
 <body>
     <div class="card">
-        <img src="fotos/propiedad_8.jpg" alt="Foto">
+        <div class="foto-container">
+            <img src="fotos/propiedad_8.jpg" onerror="this.src='https://via.placeholder.com/500x300?text=Cargando+Imagen...'" alt="Propiedad">
+        </div>
         <h2>Casa en venta 10 ambientes en 53 E/ 10 y 11 700, La Plata, La Plata, Buenos Aires</h2>
+        <div class="precio">💰 Consultar</div>
+        <div class="descripcion">
+            <strong>Descripción:</strong><br>
+            Sin descripción disponible.
+        </div>
         <a href="https://wa.me/5492215551234" class="btn">✅ QUIERO VISITARLA</a>
         <div class="footer">
-            ⚠️ La información es ilustrativa. Las medidas definitivas surgirán del título.
+            ⚠️ La información es ilustrativa. Las medidas definitivas surgirán del título de propiedad.
         </div>
     </div>
 </body>
